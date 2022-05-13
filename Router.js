@@ -69,8 +69,6 @@ export default function Router ({routes, defaultComponent}) {
         // listen for popstate event
         window.addEventListener('popstate', onLocationChange);
 
-        console.log("test1")
-
         // clean up event listener
         return () => {
             window.removeEventListener('popstate', onLocationChange)
