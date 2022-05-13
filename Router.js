@@ -73,9 +73,6 @@ export default function Router ({routes, defaultComponent}) {
             window.removeEventListener('popstate', onLocationChange)
         };
     }, [])
-
-    console.log(Array.isArray(routes))
-    console.log(typeof routes)
     return routes.find(({path, component}) => path === currentPath)?.component || defaultComponent
 }
 
