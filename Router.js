@@ -48,7 +48,6 @@ And that's it!
 
 
 
-
 /* Code Starts Here */
 
 import React from 'react';
