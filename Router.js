@@ -98,6 +98,9 @@ export function Link ({ className, href, children }) {
             return;
         }
 
+        // prevent full page reload
+        event.preventDefault();
+
         navigate(href);
     };
 
