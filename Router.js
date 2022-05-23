@@ -1,7 +1,6 @@
 /*
 
-Implements React Routing in Plain React, without reliance
-on React-Router or any other libraries.
+Implements React Routing in Plain React, without reliance on React-Router or any other libraries.
 
 To use:
 
@@ -12,14 +11,14 @@ In your top-level React Component (e.g. App or Index.js):
 - Create a const with the component to show on urls not routed (i.e. 404 page)
 - Return a Router component as the top-level component of your App
 
-Example: 
+Example:
 
 ```function App() {
    ...
    const routes = [{path:"/", component:<Home/>}, {path:"/login", component:<Login/>}]
    ...
    const defaultComponent = <NoPageExists/>
-   
+
    return (
       <Router routes={routes} defaultComponent={defaultComponent}/>
    )
@@ -28,30 +27,47 @@ Example:
 
 Then to use routes:
 
-- If you want to mimic the <a href> experience, use <Link/>, e.g.:
-  <Link className="someClass" href="/login">
-      Text or React Component
-  </Link>
+- Use <a href> as you would normally do, e.g. <a href="/register">Register</a>
 
-- If you want to add an onClick event handler to buttons etc. use
-  the `navigate` function, e.g.:
-  
-  <Button variant="contained" onClick={(e) => navigate("/Register")} fullWidth>Register</Button>
+- If you want to add an onClick event handler to buttons etc. use the `navigate` function, e.g.:
 
-- You need to import Link & Navigate to use them, e.g.:
-import { Navigate, Link } from "./Components/AKRouter";
-
+  <Button onClick={(e) => navigate("/register")} fullWidth>Register</Button>
 
 And that's it!
 
 */
 
 
-
 /* Code Starts Here */
 
 import React from 'react';
 import { useEffect, useState } from 'react';
+
+// Global Event Listener on "click"
+// Credit Chris Morgan: https://news.ycombinator.com/item?id=31373486
+window.addEventListener("click", function (event) {
+    // Only run this code when an <a> link is clicked
+    const link = event.target.closest("a");
+    // Correctly handle clicks to external sites and
+    // modifier keys
+    if (
+        !event.button &&
+        !event.altKey &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.shiftKey &&
+        link &&
+        link.href.startsWith(window.location.origin + "/") &&
+        link.target !== "_blank"
+    ) {
+        // prevent full page reload
+        event.preventDefault();
+        // Main routing function
+        navigate(link.href);
+    }
+});
+
+/* Main Component */
 
 export default function Router ({routes, defaultComponent}) {
 
@@ -87,26 +103,3 @@ export function navigate (href) {
     const navEvent = new PopStateEvent('popstate');
     window.dispatchEvent(navEvent);
 }
-
-/* Use the below when you want the full hyperlink behaviour */
-
-export function Link ({ className, href, children }) {
-
-    const onClick = (event) => {
-        // if ctrl or meta key are held on click, allow default behavior of opening link in new tab
-        if (event.metaKey || event.ctrlKey) {
-            return;
-        }
-
-        // prevent full page reload
-        event.preventDefault();
-
-        navigate(href);
-    };
-
-    return (
-        <a className={className} href={href} onClick={onClick}>
-            {children}
-        </a>
-    );
-};
