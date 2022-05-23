@@ -15,7 +15,7 @@ Example:
 
 ```function App() {
    ...
-   const routes = [{path:"/", component:<Home/>}, {path:"/login", component:<Login/>}]
+   const routes = [{path:"/", component:<Home/>}, {path:"/register", component:<Register/>}]
    ...
    const defaultComponent = <NoPageExists/>
 
